@@ -10,10 +10,19 @@ const connection = require("./db/connection");
 //const { auth_router } = require("./routes");
 
 // import dos middleweres
-const { conf_cors, logger, conf_session } = require("./middleweres");
+const { conf_cors, logger, conf_session, auth_middlewere } = require("./middleweres");
 
 // import logs de erros
 const errorHandler = require('./logs/errorHandle');
+
+// import models
+const tag = require("./models/Tag");
+const post = require("./models/Post");
+const user = require("./models/User");
+const category = require("./models/Category");
+const comment = require("./models/Comments");
+const post_tag = require("./models/Post_tag");
+const post_category = require("./models/Post_Category");
 
 // configuração do express
 app.use(
@@ -28,12 +37,13 @@ app.use(logger);
 app.use(conf_cors);
 app.use(errorHandler);
 app.use(conf_session);
+app.use(auth_middlewere);
 
 // verificar se usuário está logado
 
 
 // endpoits
-//app.use("/auth", auth_router);
+app.use("/auth", auth_router);
 
 // Servindo API se o db estiver conectado
 connection
