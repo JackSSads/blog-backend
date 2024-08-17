@@ -64,7 +64,7 @@ module.exports = class UserController {
         };
     };
 
-    static async getById(req, res) {
+    static async getByUsername(req, res) {
         const { username } = req.params;
 
         try {
