@@ -7,7 +7,7 @@ module.exports = class UserController {
 
         const { username, email, password, role } = req.body;
 
-        // check ir email exists
+        // check if email exists
         const checkIfEmail = await User.findOne({ where: { email: email } });
         if (checkIfEmail) {
             return res.status(409).json({
@@ -16,7 +16,7 @@ module.exports = class UserController {
             });
         };
 
-        // check ir user exists
+        // check if user exists
         const checkIfUser = await User.findOne({ where: { username: username } });
         if (checkIfUser) {
             return res.status(409).json({
@@ -89,8 +89,50 @@ module.exports = class UserController {
         };
     };
 
-    static async update(req, res) {
+    static async updateByUsername(req, res) {
+        const { username, email, password, role } = req.body;
 
+        // check if email exists
+        const checkIfEmail = await User.findOne({ where: { email: email } });
+        if (checkIfEmail) {
+            return res.status(409).json({
+                status: 409,
+                message: "Email already registered!",
+            });
+        };
+
+        // check if user exists
+        const checkIfUser = await User.findOne({ where: { username: username } });
+        if (checkIfUser) {
+            return res.status(409).json({
+                status: 409,
+                message: "User already registered!",
+            });
+        };
+
+        // update a password
+        const salt = bcrypt.genSaltSync(10);
+        const hashadPassword = bcrypt.hashSync(password, salt);
+
+        const data = {
+            role,
+            email,
+            password_hash: hashadPassword,
+            username,
+        };
+
+        try {
+            const user = await User.update(data, { where: { username: username } });
+
+            res.status(200).json(user);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: 500,
+                message: "An internal server error occorred",
+                error: error.message,
+            });
+        };
     };
 
     static async delete(req, res) {
