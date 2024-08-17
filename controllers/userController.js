@@ -54,7 +54,7 @@ module.exports = class UserController {
             const users = await User.findAll()
 
             res.status(200).json(users);
-        } catch(error) {
+        } catch (error) {
             console.error(error);
             res.status(500).json({
                 status: 500,
@@ -65,7 +65,28 @@ module.exports = class UserController {
     };
 
     static async getById(req, res) {
+        const { username } = req.params;
 
+        try {
+            const user = await User.findOne({ where: { username: username } });
+
+            if (!user) {
+                return res.status(404).json({
+                    status: 404,
+                    message: "User not found",
+                });
+            };
+
+            res.status(200).json(user);
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: 500,
+                message: "An internal server error occorred",
+                error: error.message,
+            });
+        };
     };
 
     static async update(req, res) {
