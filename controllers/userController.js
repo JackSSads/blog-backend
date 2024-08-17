@@ -50,7 +50,18 @@ module.exports = class UserController {
     };
 
     static async getAll(req, res) {
+        try {
+            const users = await User.findAll()
 
+            res.status(200).json(users);
+        } catch(error) {
+            console.error(error);
+            res.status(500).json({
+                status: 500,
+                message: "An internal server error occorred",
+                error: error.message,
+            });
+        };
     };
 
     static async getById(req, res) {
