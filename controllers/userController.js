@@ -1,0 +1,67 @@
+const User = require("../models/User");
+const bcrypt = require("bcrypt");
+
+module.exports = class UserController {
+
+    static async create(req, res) {
+
+        const { username, email, password, role } = req.body;
+
+        // check ir email exists
+        const checkIfEmail = await User.findOne({ where: { email: email } });
+        if (checkIfEmail) {
+            return res.status(409).json({
+                status: 409,
+                message: "Email already registered!",
+            });
+        };
+
+        // check ir user exists
+        const checkIfUser = await User.findOne({ where: { username: username } });
+        if (checkIfUser) {
+            return res.status(409).json({
+                status: 409,
+                message: "User already registered!",
+            });
+        };
+
+        // create a password
+        const salt = bcrypt.genSaltSync(10);
+        const hashadPassword = bcrypt.hashSync(password, salt);
+
+        const data = {
+            role,
+            email,
+            password_hash: hashadPassword,
+            username,
+        };
+
+        try {
+            const user = await User.create(data);
+            res.status(201).json(user);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: 500,
+                message: "An internal server error occorred",
+                error: error.message,
+            });
+        };
+    };
+
+    static async getAll(req, res) {
+
+    };
+
+    static async getById(req, res) {
+
+    };
+
+    static async update(req, res) {
+
+    };
+
+    static async delete(req, res) {
+
+    };
+};
