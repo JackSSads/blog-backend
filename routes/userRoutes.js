@@ -3,7 +3,7 @@ const UserContoller = require("../controllers/userController");
 
 user_routes.post("/", UserContoller.create);
 user_routes.get("/", UserContoller.getAll);
-user_routes.get("/:username", UserContoller.getByUsername);
-user_routes.put("/:username", UserContoller.updateByUsername);
+user_routes.get("/:user_id", UserContoller.getById);
+user_routes.put("/:user_id", UserContoller.updateById);
 
 module.exports = user_routes;
