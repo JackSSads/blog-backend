@@ -17,6 +17,14 @@ const Post = db.define('Post', {
         type: DataTypes.TEXT,
         allowNull: false,
     },
+    user_id: {
+        type: DataTypes.UUID,
+        references: {
+            model: User,
+            key: 'user_id',
+        },
+        allowNull: false,
+    },
     published_at: {
         type: DataTypes.DATE,
         allowNull: true,
