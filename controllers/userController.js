@@ -171,7 +171,7 @@ module.exports = class UserController {
             if (delet_user === 0) {
                 return res.status(500).json({
                     status: 500,
-                    message: "Failed to update user.",
+                    message: "Failed to delete user.",
                 });
             };
 
