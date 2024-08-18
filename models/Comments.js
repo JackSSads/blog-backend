@@ -14,6 +14,22 @@ const Comment = db.define('Comment', {
         type: DataTypes.TEXT,
         allowNull: false,
     },
+    post_id: {
+        type: DataTypes.UUID,
+        references: {
+            model: Post,
+            key: 'post_id'
+        },
+        allowNull: false,
+    },
+    user_id: {
+        type: DataTypes.UUID,
+        references: {
+            model: User,
+            key: 'user_id'
+        },
+        allowNull: false,
+    },
 }, {
     timestamps: true,
     tableName: 'comments',
