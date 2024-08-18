@@ -17,7 +17,8 @@ const Category = db.define('Category', {
         allowNull: true,
     },
 }, {
-    timestamps: false
+    timestamps: false,
+    tableName: 'categories',
 });
 
 module.exports = Category;
