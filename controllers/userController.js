@@ -10,8 +10,8 @@ module.exports = class UserController {
 
         try {
             // check if email exists
-            const checkIfEmail = await User.findOne({ where: { email: email } });
-            if (checkIfEmail) {
+            const check_if_email = await User.findOne({ where: { email: email } });
+            if (check_if_email) {
                 return res.status(409).json({
                     status: 409,
                     message: "Email already registered!",
@@ -19,8 +19,8 @@ module.exports = class UserController {
             };
 
             // check if user exists
-            const checkIfUser = await User.findOne({ where: { username: username } });
-            if (checkIfUser) {
+            const check_if_user = await User.findOne({ where: { username: username } });
+            if (check_if_user) {
                 return res.status(409).json({
                     status: 409,
                     message: "User already registered!",
@@ -29,12 +29,12 @@ module.exports = class UserController {
 
             // create a password
             const salt = bcrypt.genSaltSync(10);
-            const hashadPassword = bcrypt.hashSync(password, salt);
+            const hashad_password = bcrypt.hashSync(password, salt);
 
             const data = {
                 role,
                 email,
-                password_hash: hashadPassword,
+                password_hash: hashad_password,
                 username,
             };
 
@@ -95,20 +95,20 @@ module.exports = class UserController {
 
         try {
             // check if user exists
-            const checkIfUser = await User.findOne({ where: { username: username } });
+            const check_if_user = await User.findOne({ where: { username: username } });
             // check if email belongs to another user
-            const userWithEmail = await User.findOne({
+            const user_with_email = await User.findOne({
                 where: { email: email, user_id: { [Op.ne]: user_id }, }
             });
 
-            if (userWithEmail) {
+            if (user_with_email) {
                 return res.status(409).json({
                     status: 409,
                     message: "E-mail already registered!",
                 });
             };
 
-            if (checkIfUser) {
+            if (check_if_user) {
                 return res.status(409).json({
                     status: 409,
                     message: "User already registered!",
@@ -117,30 +117,30 @@ module.exports = class UserController {
 
             // update a password
             const salt = bcrypt.genSaltSync(10);
-            const hashadPassword = bcrypt.hashSync(password, salt);
+            const hashad_password = bcrypt.hashSync(password, salt);
 
             const data = {
                 role,
                 email,
-                password_hash: hashadPassword,
+                password_hash: hashad_password,
                 username,
             };
 
-            const updateUser = await User.update(data, { where: { user_id: user_id } });
+            const update_user = await User.update(data, { where: { user_id: user_id } });
 
-            if (updateUser === 0) {
+            if (update_user === 0) {
                 return res.status(500).json({
                     status: 500,
                     message: "Failed to update user.",
                 });
             };
 
-            const updatedUser = await User.findOne({ where: { user_id: user_id } });
+            const updated_user = await User.findOne({ where: { user_id: user_id } });
 
             res.status(200).json({
                 status: 200,
                 message: "User updated successfully!",
-                user: updatedUser,
+                user: updated_user,
             });
         } catch (error) {
             console.error(error);
@@ -157,18 +157,18 @@ module.exports = class UserController {
 
         try {
             // check if user exists
-            const checkIfUser = await User.findOne({ where: { user_id: user_id } });
+            const check_if_user = await User.findOne({ where: { user_id: user_id } });
 
-            if (checkIfUser) {
+            if (check_if_user) {
                 return res.status(409).json({
                     status: 409,
                     message: "User already registered!",
                 });
             };
 
-            const deletUser = await User.destroy({ where: { user_id: user_id }});
+            const delet_user = await User.destroy({ where: { user_id: user_id }});
 
-            if (deletUser === 0) {
+            if (delet_user === 0) {
                 return res.status(500).json({
                     status: 500,
                     message: "Failed to update user.",
@@ -187,6 +187,6 @@ module.exports = class UserController {
                 message: "An internal server error occorred",
                 error: error.message,
             });
-        }
+        };
     };
 };
