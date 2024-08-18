@@ -157,7 +157,7 @@ module.exports = class UserController {
 
         try {
             // check if user exists
-            const checkIfUser = await User.findOne({ where: { username: username } });
+            const checkIfUser = await User.findOne({ where: { user_id: user_id } });
 
             if (checkIfUser) {
                 return res.status(409).json({
