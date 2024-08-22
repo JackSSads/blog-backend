@@ -16,7 +16,6 @@ module.exports = class CategoryController {
 
             res.status(201).json(category);
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
@@ -31,7 +30,6 @@ module.exports = class CategoryController {
 
             res.status(200).json(categories);
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
@@ -46,7 +44,7 @@ module.exports = class CategoryController {
         try {
             const category = await Category.findOne({ where: { category_id: category_id } });
 
-            if (category) {
+            if (!category) {
                 return res.status(404).json({
                     status: 404,
                     message: "Category not found",
@@ -55,7 +53,6 @@ module.exports = class CategoryController {
 
             res.status(200).json(category);
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
@@ -91,7 +88,6 @@ module.exports = class CategoryController {
             });
 
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
@@ -118,7 +114,6 @@ module.exports = class CategoryController {
                 message: "Category deleted successfully!",
             });
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
