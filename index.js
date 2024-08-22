@@ -46,6 +46,7 @@ app.use("/category", category_routes);
 
 // Servindo API se o db estiver conectado
 connection
+    //.sync({ force: true })
     .sync()
     .then(() => {
         app.listen(PORT);
