@@ -41,7 +41,6 @@ module.exports = class UserController {
             const user = await User.create(data);
             res.status(201).json(user);
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
@@ -56,7 +55,6 @@ module.exports = class UserController {
 
             res.status(200).json(users);
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
@@ -80,7 +78,6 @@ module.exports = class UserController {
 
             res.status(200).json(user);
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
@@ -95,23 +92,26 @@ module.exports = class UserController {
 
         try {
             // check if user exists
-            const check_if_user = await User.findOne({ where: { username: username } });
-            // check if email belongs to another user
-            const user_with_email = await User.findOne({
-                where: { email: email, user_id: { [Op.ne]: user_id }, }
+            const check_if_user = await User.findOne({
+                where: { username: username, user_id: { [Op.ne]: user_id } }
             });
 
-            if (user_with_email) {
-                return res.status(409).json({
-                    status: 409,
-                    message: "E-mail already registered!",
-                });
-            };
+            // check if email belongs to another user
+            const user_with_email = await User.findOne({
+                where: { email: email, user_id: { [Op.ne]: user_id } }
+            });
 
             if (check_if_user) {
                 return res.status(409).json({
                     status: 409,
                     message: "User already registered!",
+                });
+            };
+
+            if (user_with_email) {
+                return res.status(409).json({
+                    status: 409,
+                    message: "E-mail already registered!",
                 });
             };
 
@@ -143,7 +143,6 @@ module.exports = class UserController {
                 user: updated_user,
             });
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
@@ -159,14 +158,14 @@ module.exports = class UserController {
             // check if user exists
             const check_if_user = await User.findOne({ where: { user_id: user_id } });
 
-            if (check_if_user) {
+            if (!check_if_user) {
                 return res.status(409).json({
                     status: 409,
-                    message: "User already registered!",
+                    message: "User not registered!",
                 });
             };
 
-            const delet_user = await User.destroy({ where: { user_id: user_id }});
+            const delet_user = await User.destroy({ where: { user_id: user_id } });
 
             if (delet_user === 0) {
                 return res.status(500).json({
@@ -181,7 +180,6 @@ module.exports = class UserController {
             });
 
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
