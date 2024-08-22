@@ -36,7 +36,6 @@ module.exports = class CommentsController {
 
             res.status(201).json(comment);
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
@@ -54,7 +53,6 @@ module.exports = class CommentsController {
 
             res.status(200).json(comments);
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
@@ -84,7 +82,6 @@ module.exports = class CommentsController {
 
             res.status(200).json(comment);
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
@@ -126,7 +123,6 @@ module.exports = class CommentsController {
             });
 
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
@@ -169,7 +165,6 @@ module.exports = class CommentsController {
             });
 
         } catch (error) {
-            console.error(error);
             res.status(500).json({
                 status: 500,
                 message: "An internal server error occorred",
