@@ -36,8 +36,8 @@ app.use(express.json());
 app.use(logger);
 app.use(conf_cors);
 app.use(errorHandler);
-app.use(conf_session);
-app.use(auth_middlewere);
+//app.use(conf_session);
+//app.use(auth_middlewere);
 
 // endpoits
 app.use("/auth", auth_router);
