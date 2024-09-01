@@ -1,4 +1,5 @@
 const Post = require("../models/Post");
+const User = require("../models/User");
 
 module.exports = class PostController {
 
@@ -31,7 +32,10 @@ module.exports = class PostController {
     static async getAll(req, res) {
         try {
 
-            const posts = await Post.findAll();
+            const posts = await Post.findAll({
+                include: User,
+                plain: true
+            });
 
             res.status(200).json(posts);
         } catch (error) {
@@ -48,7 +52,11 @@ module.exports = class PostController {
 
             const { post_id } = req.body;
 
-            const post = await Post.findOne({ where: { post_id: post_id } });
+            const post = await Post.findOne({ 
+                where: { post_id: post_id },
+                include: User,
+                plain: true
+            });
 
             if (!post) {
                 return res.status(404).json({
