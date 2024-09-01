@@ -7,7 +7,16 @@ const PORT = process.env.PORT
 const connection = require("./db/connection");
 
 // import das rotas
-const { auth_router, user_routes, category_routes } = require("./routes");
+const {
+    auth_router,
+    user_routes,
+    category_routes,
+    post_routes,
+    comments_routes,
+    post_category_routes,
+    post_tag_routes,
+    tag_routes
+} = require("./routes");
 
 // import dos middleweres
 const { conf_cors, logger, conf_session, auth_middlewere } = require("./middleweres");
@@ -42,7 +51,14 @@ app.use(errorHandler);
 // endpoits
 app.use("/auth", auth_router);
 app.use("/user", user_routes);
+
+app.use("/tag", tag_routes);
+app.use("/post", post_routes);
 app.use("/category", category_routes);
+app.use("/comments", comments_routes);
+
+app.use("/post_tag", post_tag_routes);
+app.use("/post_category", post_category_routes);
 
 // Servindo API se o db estiver conectado
 connection
