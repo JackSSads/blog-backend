@@ -1,27 +1,22 @@
-const Category = require("../models/Category");
+const Tag = require("../models/Tag");
 
-module.exports = class CategoryController {
+module.exports = class TagController {
 
     static async create(req, res) {
         try {
 
-            const { name, description } = req.body;
+            const { name } = req.body;
 
-            const data = {
-                name,
-                description,
-            };
+            const tag = await Tag.create({ name: name });
 
-            const category = await Category.create(data);
-
-            if (!category) {
+            if (!tag) {
                 return res.status(500).json({
                     status: 500,
-                    message: "Category no created!",
+                    message: "Tag no created!",
                 });
             };
 
-            res.status(201).json(category);
+            res.status(201).json(tag);
         } catch (error) {
             res.status(500).json({
                 status: 500,
@@ -34,9 +29,9 @@ module.exports = class CategoryController {
     static async getAll(req, res) {
         try {
 
-            const categories = await Category.findAll();
+            const tags = await Tag.findAll();
 
-            res.status(200).json(categories);
+            res.status(200).json(tags);
         } catch (error) {
             res.status(500).json({
                 status: 500,
@@ -49,18 +44,11 @@ module.exports = class CategoryController {
     static async getById(req, res) {
         try {
 
-            const { category_id } = req.body;
+            const { tag_id } = req.body;
 
-            const category = await Category.findOne({ where: { category_id: category_id } });
+            const tag = await Tag.findOne({ where: { name: tag_id } });
 
-            if (!category) {
-                return res.status(404).json({
-                    status: 404,
-                    message: "Category not found",
-                });
-            };
-
-            res.status(200).json(category);
+            res.status(200).json(tag);
         } catch (error) {
             res.status(500).json({
                 status: 500,
@@ -73,36 +61,33 @@ module.exports = class CategoryController {
     static async updateById(req, res) {
         try {
 
-            const { category_id, name, description } = req.body;
+            const { tag_id, name } = req.body;
 
-            const check_if_category_exists = await Category.findOne({ where: { category_id: category_id } });
+            const check_if_tag_existis = await Tag.findOne({ where: { tag_id: tag_id } });
 
-            if (!check_if_category_exists) {
+            if (!check_if_tag_existis) {
                 return res.status(404).json({
                     status: 404,
-                    message: "Category not found",
+                    message: "Tag not found!",
                 });
             };
 
-            const data = { name, description };
+            const update_tag = await Tag.update({ name }, { where: { tag_id: tag_id } });
 
-            const category = await Category.update(data, { where: { category_id: category_id } });
-
-            if (category === 0) {
+            if (!update_tag) {
                 return res.status(500).json({
                     status: 500,
-                    message: "Failed to update user.",
+                    message: "updateTag no updated!",
                 });
             };
 
-            const update_category = await Category.findOne({ where: { category_id: category_id } })
+            const updated_tag = await Tag.findOne({ where: { tag_id: tag_id } });
 
             res.status(200).json({
                 status: 200,
-                message: "Category updated successfully!",
-                data: update_category,
+                message: "User updated successfully!",
+                data: updated_tag,
             });
-
         } catch (error) {
             res.status(500).json({
                 status: 500,
@@ -115,29 +100,29 @@ module.exports = class CategoryController {
     static async deleteById(req, res) {
         try {
 
-            const { category_id } = req.body;
+            const { tag_id } = req.body;
 
-            const check_if_category_exists = await Category.findOne({ where: { category_id: category_id } });
+            const check_of_tag_existis = await Tag.findOne({ where: { name: tag_id } });
 
-            if (!check_if_category_exists) {
+            if (!check_of_tag_existis) {
                 return res.status(404).json({
                     status: 404,
-                    message: "Category not found",
+                    message: "Tag no found!",
                 });
             };
 
-            const category = await Category.destroy({ where: { category_id: category_id } });
+            const delete_tag = await Tag.destroy({ where: { tag_id: tag_id } });
 
-            if (category === 0) {
+            if (!delete_tag) {
                 return res.status(500).json({
                     status: 500,
-                    message: "Failed to delete category.",
+                    message: "Tag no deleted!",
                 });
             };
 
             res.status(200).json({
                 status: 200,
-                message: "Category deleted successfully!",
+                message: "Tag deleted successfully!",
             });
         } catch (error) {
             res.status(500).json({

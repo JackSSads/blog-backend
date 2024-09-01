@@ -5,15 +5,12 @@ const User = require("../models/User");
 module.exports = class CommentsController {
 
     static async create(req, res) {
-        const { content, post_id, user_id } = req.body;
-
-        const data = {
-            content,
-            post_id,
-            user_id,
-        };
-
         try {
+
+            const { content, post_id, user_id } = req.body;
+
+            const data = { content, post_id, user_id };
+
             const check_if_post_exists = await Post.findOne({ where: { post_id: post_id } });
 
             if (!check_if_post_exists) {
@@ -33,6 +30,13 @@ module.exports = class CommentsController {
             };
 
             const comment = await Comments.create(data);
+
+            if (!comment) {
+                return res.status(500).json({
+                    status: 500,
+                    message: "Comment no created!",
+                });
+            };
 
             res.status(201).json(comment);
         } catch (error) {
@@ -62,9 +66,10 @@ module.exports = class CommentsController {
     };
 
     static async getById(req, res) {
-        const { comment_id } = req.body;
-
         try {
+
+            const { comment_id } = req.body;
+
             const comment = await Comments.findOne({
                 where: {
                     comment_id: comment_id
@@ -91,21 +96,20 @@ module.exports = class CommentsController {
     };
 
     static async updateById(req, res) {
-        const { comment_id, content } = req.body;
-
         try {
-            const comment = await Comments.findOne({ where: { comment_id: comment_id } });
 
-            if (!comment) {
+            const { comment_id, content } = req.body;
+
+            const check_if_comment_exists = await Comments.findOne({ where: { comment_id: comment_id } });
+
+            if (!check_if_comment_exists) {
                 return res.status(404).json({
                     status: 404,
                     message: "Comment not found",
                 });
             };
 
-            const update_comment = await Comments.update({ content: content }, {
-                where: { comment_id: comment_id }
-            });
+            const update_comment = await Comments.update({ content: content }, { where: { comment_id: comment_id } });
 
             if (update_comment === 0) {
                 return res.status(500).json({
@@ -119,7 +123,7 @@ module.exports = class CommentsController {
             res.status(200).json({
                 status: 200,
                 message: "User updated successfully!",
-                user: updated_comment,
+                data: updated_comment,
             });
 
         } catch (error) {
@@ -132,16 +136,11 @@ module.exports = class CommentsController {
     };
 
     static async deleteById(req, res) {
-        const { comment_id } = req.body;
-
         try {
-            const check_if_comment_exists = await Comments.findOne({
-                where: {
-                    comment_id: comment_id
-                },
-                include: Post,
-                plain: true,
-            });
+
+            const { comment_id } = req.body;
+
+            const check_if_comment_exists = await Comments.findOne({ where: { comment_id: comment_id } });
 
             if (!check_if_comment_exists) {
                 return res.status(404).json({

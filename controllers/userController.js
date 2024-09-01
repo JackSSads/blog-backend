@@ -5,10 +5,10 @@ const { Op } = require('sequelize');
 module.exports = class UserController {
 
     static async create(req, res) {
-
-        const { username, email, password, role } = req.body;
-
         try {
+
+            const { username, email, password, role } = req.body;
+
             // check if email exists
             const check_if_email = await User.findOne({ where: { email: email } });
             if (check_if_email) {
@@ -39,6 +39,14 @@ module.exports = class UserController {
             };
 
             const user = await User.create(data);
+
+            if (!user) {
+                return res.status(500).json({
+                    status: 500,
+                    message: "User no created!",
+                });
+            };
+
             res.status(201).json(user);
         } catch (error) {
             res.status(500).json({
@@ -64,9 +72,10 @@ module.exports = class UserController {
     };
 
     static async getById(req, res) {
-        const { user_id } = req.params;
-
         try {
+
+            const { user_id } = req.params;
+
             const user = await User.findOne({ where: { user_id: user_id } });
 
             if (!user) {
@@ -87,10 +96,11 @@ module.exports = class UserController {
     };
 
     static async updateById(req, res) {
-        const { user_id } = req.params;
-        const { username, email, password, role } = req.body;
-
         try {
+
+            const { user_id } = req.params;
+            const { username, email, password, role } = req.body;
+
             // check if user exists
             const check_if_user = await User.findOne({
                 where: { username: username, user_id: { [Op.ne]: user_id } }
@@ -119,12 +129,7 @@ module.exports = class UserController {
             const salt = bcrypt.genSaltSync(10);
             const hashad_password = bcrypt.hashSync(password, salt);
 
-            const data = {
-                role,
-                email,
-                password_hash: hashad_password,
-                username,
-            };
+            const data = { role, email, password_hash: hashad_password, username };
 
             const update_user = await User.update(data, { where: { user_id: user_id } });
 
@@ -140,7 +145,7 @@ module.exports = class UserController {
             res.status(200).json({
                 status: 200,
                 message: "User updated successfully!",
-                user: updated_user,
+                data: updated_user,
             });
         } catch (error) {
             res.status(500).json({
@@ -152,9 +157,10 @@ module.exports = class UserController {
     };
 
     static async deleteById(req, res) {
-        const { user_id } = req.params;
-
         try {
+
+            const { user_id } = req.params;
+
             // check if user exists
             const check_if_user = await User.findOne({ where: { user_id: user_id } });
 
