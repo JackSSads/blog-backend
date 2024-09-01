@@ -8,4 +8,5 @@
     DB_DIALECT=''
     PORT=3001
     TOKEN_SECRET=''
+    TOKEN_SECRET_SESSION='dev'
 }
