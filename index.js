@@ -55,7 +55,7 @@ app.use("/user", user_routes);
 app.use("/tag", tag_routes);
 app.use("/post", post_routes);
 app.use("/category", category_routes);
-app.use("/comments", comments_routes);
+app.use("/comment", comments_routes);
 
 app.use("/post_tag", post_tag_routes);
 app.use("/post_category", post_category_routes);
